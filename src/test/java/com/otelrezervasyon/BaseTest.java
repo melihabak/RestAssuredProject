@@ -31,6 +31,11 @@ public class BaseTest {
         return response.jsonPath().getJsonObject("token");
     }
 
+    protected int createBookingId(){
+        Response response = createBooking();
+        return response.jsonPath().getJsonObject("bookingid");
+    }
+
     // Rezervasyon Olusturma
     protected Response createBooking(){
         Response response = given()
