@@ -1,3 +1,5 @@
+package com.otelrezervasyon;
+
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.json.JSONObject;
