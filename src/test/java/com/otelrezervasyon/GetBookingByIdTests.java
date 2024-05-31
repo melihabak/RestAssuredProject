@@ -3,12 +3,9 @@ package com.otelrezervasyon;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Date;
-
 import static io.restassured.RestAssured.given;
 
-public class GetBookingByIdTests {
+public class GetBookingByIdTests extends BaseTest{
 
     @Test
     public void getBookingById(){
@@ -22,9 +19,12 @@ public class GetBookingByIdTests {
                 .statusCode(200);
         */
 
+        Response newBooking = createBooking();
+        int reservationId = newBooking.jsonPath().getJsonObject("bookingid");
+
         Response response = given()
                 .when()
-                .get("https://restful-booker.herokuapp.com/booking/20");
+                .get("https://restful-booker.herokuapp.com/booking/"+reservationId);
 
         response
                 .then()
@@ -38,12 +38,11 @@ public class GetBookingByIdTests {
         boolean depositPaid = response.jsonPath().getJsonObject("depositpaid");
         String checkIn = response.jsonPath().getJsonObject("bookingdates.checkin");
 
-
-        Assertions.assertEquals("Jane",firstName);
-        Assertions.assertEquals("Doe",lastName);
-        Assertions.assertEquals(111,totalPrice);
+        Assertions.assertEquals("Melih",firstName);
+        Assertions.assertEquals("Abak",lastName);
+        Assertions.assertEquals(821,totalPrice);
         Assertions.assertEquals(true,depositPaid);
-        Assertions.assertEquals("2018-01-01",checkIn);
+        Assertions.assertEquals("2024-01-01",checkIn);
 
     }
 }
