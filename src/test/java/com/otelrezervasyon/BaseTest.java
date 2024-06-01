@@ -1,8 +1,15 @@
 package com.otelrezervasyon;
 
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
+
+import java.util.Arrays;
 
 import static io.restassured.RestAssured.given;
 
@@ -13,6 +20,14 @@ public class BaseTest {
     // test kosumu gerceklesmeden once ve sonrasında yapilan mukerrer islemlerin (before ve after anotasyonları) burada gerceklesmesi
     // ve bu sayede diger test siniflarinin okunabilirliginin ve duzenlenebilirliginin kolaylastirilmasi
 
+    RequestSpecification spec;
+    @BeforeEach
+    public void setup(){
+        spec = new RequestSpecBuilder()
+                .setBaseUri("https://restful-booker.herokuapp.com")
+                .addFilters(Arrays.asList(new RequestLoggingFilter(),new ResponseLoggingFilter()))
+                .build();
+    }
 
     // Token olusturma metodu
     protected String createToken(){
@@ -21,13 +36,11 @@ public class BaseTest {
         tokenBody.put("username","admin");
         tokenBody.put("password","password123");
 
-        Response response = given()
+        Response response = given(spec)
                 .contentType(ContentType.JSON)
                 .when()
                 .body(tokenBody.toString())
-                .log().all()
-                .post("https://restful-booker.herokuapp.com/auth");
-        response.prettyPrint();
+                .post("/auth");
         return response.jsonPath().getJsonObject("token");
     }
 
@@ -38,13 +51,11 @@ public class BaseTest {
 
     // Rezervasyon Olusturma
     protected Response createBooking(){
-        Response response = given()
+        Response response = given(spec)
                 .when()
                 .contentType(ContentType.JSON)
                 .body(bookingObject("Melih","Abak",100,true))
-                .post("https://restful-booker.herokuapp.com/booking");
-
-        response.prettyPrint();
+                .post("/booking");
 
         // Assertionlarin Yazilmasi
 

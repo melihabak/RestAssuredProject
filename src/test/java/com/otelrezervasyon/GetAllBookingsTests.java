@@ -3,15 +3,15 @@ package com.otelrezervasyon;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
-public class GetAllBookingsTests {
+public class GetAllBookingsTests extends BaseTest {
     @Test
     public void getAllBookingTest(){
 
-        given()
+        given(spec)
                 .when()
-                .get("https://restful-booker.herokuapp.com/booking")
+                .get("/booking")
                 .then()
-                .log().all() // Yaptigimiz cagrinin sonucunu gorebilecegiz
+                //.log().all() // Yaptigimiz cagrinin sonucunu gorebilecegiz
                 .statusCode(200);
 
     }

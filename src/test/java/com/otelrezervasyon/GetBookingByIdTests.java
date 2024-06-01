@@ -22,15 +22,15 @@ public class GetBookingByIdTests extends BaseTest{
         Response newBooking = createBooking();
         int reservationId = newBooking.jsonPath().getJsonObject("bookingid");
 
-        Response response = given()
+        Response response = given(spec)
                 .when()
-                .get("https://restful-booker.herokuapp.com/booking/"+reservationId);
+                .get("/booking/"+reservationId);
 
         response
                 .then()
                 .statusCode(200);
 
-        response.prettyPrint(); //Response kismini daha okunakli halde terminalden gorunur hale getirdik
+        // response.prettyPrint(); //Response kismini daha okunakli halde terminalden gorunur hale getirdik
 
         String firstName = response.jsonPath().getJsonObject("firstname");
         String lastName = response.jsonPath().getJsonObject("lastname");
@@ -40,7 +40,7 @@ public class GetBookingByIdTests extends BaseTest{
 
         Assertions.assertEquals("Melih",firstName);
         Assertions.assertEquals("Abak",lastName);
-        Assertions.assertEquals(821,totalPrice);
+        Assertions.assertEquals(100,totalPrice);
         Assertions.assertEquals(true,depositPaid);
         Assertions.assertEquals("2024-01-01",checkIn);
 
